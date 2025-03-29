@@ -1,0 +1,109 @@
+#drop-area {
+    width: 450px;
+    padding: 20px;
+    background: rgb(216, 228, 238);
+    text-align: center;
+    border-radius: 20px;
+    margin: auto; /* Add margin to move it from the left */
+}
+
+#crop {
+    width: 450px;
+    padding: 20px;
+    background: rgb(216, 228, 238);
+    border-radius: 20px;
+    margin:auto;
+    display: flex;
+    flex-wrap: wrap; /* Keep wrap for responsiveness */
+    gap: 10px; /* Adjust gap for spacing */
+    justify-content: flex-start; /* Align items to the start */
+    align-items: center; /* Align items vertically in the center */
+}
+
+#img-view {
+    width: 400px;
+    height: 400px;
+    border-radius: 20px;
+    border: 2px dashed black;
+    background: #f7f8ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #888;
+    /* Style for the placeholder text */
+    font-size: 1.2em;
+}
+
+#img-view img#bg {
+    display: none;
+    /* Hide the initial img tag */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 20px;
+    /* Match the parent */
+}
+
+
+#crop > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#crop img {
+    max-width: 80px; /* Adjust max-width to make them fit in a line */
+    max-height: 80px; /* Adjust max-height to make them appear more cropped */
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    object-fit: contain; /* Ensure the whole image is visible within the constraints */
+}
+
+#crop p {
+    margin-top: 5px;
+    font-size: 0.8em; /* Adjust font size if needed */
+    color: #555;
+    white-space: nowrap; /* Prevent labels from wrapping */
+}
+
+#result {
+    margin-top: 20px;
+    margin-left: 30px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9em;
+    white-space: pre-wrap; /* Display JSON response with line breaks */
+}
+
+.offcanvas-end {
+    width: 300px !important; /* Adjust the width as needed */
+}
+
+.navbar-brand
+{
+    position: relative;
+    display: inline-block;
+}
+
+.website-name
+{
+    position: absolute;
+    top: -2;
+    left: 0;
+    background-color:transparent;
+    padding: 0 10px;
+    transform: translateX(50);
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 0;
+
+}
+
+.navbar-brand:hover .website-name 
+{
+    transform: translateX(50px);
+    opacity: 1;
+}
