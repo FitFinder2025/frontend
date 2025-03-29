@@ -89,8 +89,14 @@
     display: inline-block;
 }
 
+@font-face {
+    font-family: 'Walter Turncoat';
+    src: url('fonts/WalterTurncoat.ttf');
+  }
+
 .website-name
 {
+    font-family:'Walter Turncoat';
     position: absolute;
     top: -2;
     left: 0;
