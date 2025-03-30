@@ -62,6 +62,36 @@
           </nav>
       </div>
     </div>
+    <div class="about-title">
+        <h1>Welcome To Fit Finder!!</h1>
+        <h2> Creators: Aman Anwar, Noah Franks, Holly Mills</h2>
+    </div>
+    <script>
+        // Interactive text animation
+        const title = document.querySelector('.about-title h1');
+        const subtitle = document.querySelector('.about-title h2');
+        const moveRange = 30; // Adjust this value to control movement amount
+
+        document.addEventListener('mousemove', (e) => {
+            const { innerWidth, innerHeight } = window;
+            const centerX = innerWidth / 2;
+            const centerY = innerHeight / 2;
+            
+            // Calculate position relative to center
+            const xPercent = (e.clientX - centerX) / centerX;
+            const yPercent = (e.clientY - centerY) / centerY;
+
+            // Apply movement to title
+            title.style.transform = `
+                translate(${xPercent * moveRange}px, ${yPercent * moveRange}px)
+            `;
+
+            // Apply inverse movement to subtitle for parallax effect
+            subtitle.style.transform = `
+                translate(${-xPercent * (moveRange/2)}px, ${-yPercent * (moveRange/2)}px)
+            `;
+        });
+    </script>
 
 
     <script src="/upload.js"></script>

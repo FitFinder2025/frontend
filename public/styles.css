@@ -200,4 +200,37 @@
     
 }
 
+.about-title {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.about-title h1 {
+    font-size: 4rem;
+    font-family: 'Walter Turncoat', cursive;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    transition: transform 0.1s ease-out;
+    cursor: default;
+    margin-bottom: 1rem;
+}
+
+.about-title h2 {
+    font-size: 1.5rem;
+    font-family: 'Walter Turncoat', cursive;
+    color: #d1e8ff;
+    transition: transform 0.1s ease-out;
+    cursor: default;
+}
+
+
+
+
 
