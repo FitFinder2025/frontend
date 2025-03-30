@@ -38,7 +38,7 @@
     height: 400px;
     border-radius: 20px;
     border: 2px dashed #6a8ea5;
-    background: #003a54;
+    background: #f5e8fc;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -87,7 +87,7 @@
     top: 40px; /* Adjust based on your navbar height */
     right: -500px;
     width: 1000px; /* Adjust width as needed */
-    height: calc(800px - 70px); /* Adjust height based on your navbar height */
+    height: 50%; /* Adjust height based on your navbar height */
     padding: 10px;
     border-radius: 20px;
     z-index: 1000;

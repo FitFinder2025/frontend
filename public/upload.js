@@ -122,13 +122,14 @@ const closetDiv = document.getElementById("closet")
             }
         }
         const mainContent = document.getElementById('main-content');
-        
+
 
         function triggerTransition()
         {
-    
+
             mainContent.classList.add('shift-left');
             resultDiv.classList.add('show');
+            resultDiv.innerHTML = ''; // Clear previous results
         }
 
         function sendImageToCropAPI(file) {
@@ -159,88 +160,95 @@ const closetDiv = document.getElementById("closet")
 
         function cropAndDisplay(originalFile, cropData) {
             const reader = new FileReader();
-
+        
             reader.onload = function (event) {
                 const originalImage = new Image();
                 originalImage.onload = function () {
                     const container = document.getElementById('crop');
                     if (container) {
-                        container.innerHTML = ''; // Clear previous cropped images
-                        container.style.display = 'flex'; // Ensure it's a flex container
-                        container.style.flexDirection = 'row'; // Display items in a row
-                        container.style.alignItems = 'center'; // Align items vertically
+                        container.innerHTML = '';
+                        container.style.display = 'flex';
+                        container.style.flexDirection = 'row';
+                        container.style.alignItems = 'center';
                     }
-
+        
                     cropData.forEach(cropInfo => {
                         const category = cropInfo.category;
                         const startYPercentage = cropInfo.start_y;
                         const endYPercentage = cropInfo.end_y;
-
+        
                         const imageHeight = originalImage.height;
                         const startY = Math.round((startYPercentage / 100) * imageHeight);
                         const endY = Math.round((endYPercentage / 100) * imageHeight);
                         const cropHeight = endY - startY;
-
+        
                         if (cropHeight > 0) {
                             const canvas = document.createElement('canvas');
                             const ctx = canvas.getContext('2d');
-                            canvas.width = originalImage.width; // Keep the original width
+                            canvas.width = originalImage.width;
                             canvas.height = cropHeight;
-
-                            // Draw the cropped section onto the canvas
+        
                             ctx.drawImage(
                                 originalImage,
-                                0, startY, // Source X, Source Y
-                                originalImage.width, cropHeight, // Source Width, Source Height
-                                0, 0, // Destination X, Destination Y
-                                originalImage.width, cropHeight // Destination Width, Destination Height
+                                0, startY,
+                                originalImage.width, cropHeight,
+                                0, 0,
+                                originalImage.width, cropHeight
                             );
-
+        
                             canvas.toBlob(function (blob) {
                                 const formData = new FormData();
                                 formData.append('query_image', blob, `cropped_${category}.png`);
                                 formData.append('cloth_type', category);
-                            
+        
                                 fetch('http://localhost:5000/search', {
                                     method: 'POST',
                                     body: formData
                                 })
-                                    .then(response => { // Rename 'data' to 'response' for clarity
-                                        console.log(`Search API Response for ${category}:`, response);
-                                        return response.text(); // Get the response body as text
-                                    })
-                                    .then(url => { // 'url' will contain the plain text URL returned by Flask
-                                        console.log(`URL for ${category}:`, "localhost:5000/"+url);
-                                        resultDiv.innerHTML += `<p><b>${category}:</b> URL: <a href="${url}" target="_blank">${url}</a></p>`
-                                        resultDiv.innerHTML+= `<img src=${"http://localhost:5000"+url} >`;
+                                    .then(response => response.json()) // Expecting a JSON object
+                                    .then(data => {
+                                        console.log(`Search API Response for ${category}:`, data);
+                                        if (data && data.file_path) {
+                                            const imageUrl = `http://localhost:5000/uploads/${data.file_path}`;
+                                            const imgElement = document.createElement('img');
+                                            imgElement.src = imageUrl;
+                                            imgElement.alt = category;
+                                            imgElement.style.maxHeight = '150px';
+                                            imgElement.style.maxWidth = '150px';
+                                            imgElement.style.objectFit = 'contain';
+                                            imgElement.style.margin = '5px';
+                                            resultDiv.appendChild(imgElement);
+                                        } else {
+                                            console.warn(`File path not found in Search API response for ${category}`);
+                                            resultDiv.innerHTML += `<p><b>${category}:</b> Error retrieving image (file path missing).</p>`;
+                                        }
                                     })
                                     .catch(error => {
                                         console.error(`Error sending ${category} to Search API:`, error);
-                                        resultDiv.innerHTML += `<p><b>${category}:</b> Error sending to search API.</p>`;
+                                        resultDiv.innerHTML += `<p><b>${category}:</b> Error retrieving image.</p>`;
                                     });
                             }, 'image/png');
-                            
-
+        
+        
                             const croppedImage = new Image();
                             croppedImage.src = canvas.toDataURL();
                             croppedImage.alt = `Cropped ${category}`;
-                            croppedImage.style.maxHeight = '80px'; // Limit height
-                            croppedImage.style.maxWidth = '80px';  // Limit width
-                            croppedImage.style.objectFit = 'contain'; // Ensure full image is visible
-                            croppedImage.style.marginRight = '10px'; // Add spacing between images
-
+                            croppedImage.style.maxHeight = '80px';
+                            croppedImage.style.maxWidth = '80px';
+                            croppedImage.style.objectFit = 'contain';
+                            croppedImage.style.marginRight = '10px';
+        
                             const label = document.createElement('p');
                             label.textContent = category;
                             label.style.fontSize = '0.8em';
                             label.style.textAlign = 'center';
                             label.style.whiteSpace = 'nowrap';
-
+        
                             const imageContainer = document.createElement('div');
                             imageContainer.style.display = 'flex';
                             imageContainer.style.flexDirection = 'column';
                             imageContainer.style.alignItems = 'center';
                             imageContainer.appendChild(croppedImage);
-                            imageContainer.appendChild(label);
                             container.appendChild(imageContainer);
                         } else {
                             console.warn(`Skipping crop for ${category}: Invalid height.`);
@@ -251,6 +259,3 @@ const closetDiv = document.getElementById("closet")
             };
             reader.readAsDataURL(originalFile);
         }
-
-
-   
