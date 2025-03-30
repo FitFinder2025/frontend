@@ -71,3 +71,4 @@ if (uploadFile) { // Ensure the upload button exists on the page
         }
     });
 }
+

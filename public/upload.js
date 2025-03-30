@@ -167,7 +167,7 @@ function cropAndDisplay(originalFile, cropData) {
     const reader = new FileReader();
     let imagesLoadedCount = 0;
     const totalImagesToLoad = cropData.length;
-    let headingAdded = false; // Flag to track if the heading has been added
+    let headingAdded = false; // Flag for search results heading
 
     function checkLoadingComplete() {
         if (imagesLoadedCount === totalImagesToLoad) {
@@ -181,12 +181,13 @@ function cropAndDisplay(originalFile, cropData) {
         const originalImage = new Image();
         originalImage.onload = function () {
             const container = document.getElementById('crop');
-            if (container) {
-                container.innerHTML = '';
-                container.style.display = 'flex';
-                container.style.flexDirection = 'row';
-                container.style.alignItems = 'center';
-            }
+if (container) {
+    container.innerHTML = '';
+    // Remove these conflicting inline styles
+    // container.style.display = 'flex';
+    // container.style.flexDirection = 'column';
+    // container.style.alignItems = 'flex-start';
+}
 
             // If there are no crops, remove loading animation immediately
             if (totalImagesToLoad === 0) {
@@ -195,7 +196,7 @@ function cropAndDisplay(originalFile, cropData) {
                 return;
             }
 
-            // Add the heading only once before processing crops
+            // Add the search results heading only once
             if (!headingAdded) {
                 let heading = document.createElement("h3");
                 heading.innerText = "Matching Items in Your Closet";
@@ -289,7 +290,6 @@ function cropAndDisplay(originalFile, cropData) {
 
                     const imageContainer = document.createElement('div');
                     imageContainer.style.display = 'flex';
-                    imageContainer.style.flexDirection = 'column';
                     imageContainer.style.alignItems = 'center';
                     imageContainer.appendChild(croppedImage);
                     container.appendChild(imageContainer);
