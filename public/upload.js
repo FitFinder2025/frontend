@@ -167,6 +167,7 @@ function cropAndDisplay(originalFile, cropData) {
     const reader = new FileReader();
     let imagesLoadedCount = 0;
     const totalImagesToLoad = cropData.length;
+    let headingAdded = false; // Flag to track if the heading has been added
 
     function checkLoadingComplete() {
         if (imagesLoadedCount === totalImagesToLoad) {
@@ -192,6 +193,14 @@ function cropAndDisplay(originalFile, cropData) {
                 resultDiv.classList.remove('loading');
                 console.log("No crops to process, animation stopped.");
                 return;
+            }
+
+            // Add the heading only once before processing crops
+            if (!headingAdded) {
+                let heading = document.createElement("h3");
+                heading.innerText = "Matching Items in Your Closet";
+                resultDiv.appendChild(heading);
+                headingAdded = true;
             }
 
             cropData.forEach(cropInfo => {
@@ -229,6 +238,7 @@ function cropAndDisplay(originalFile, cropData) {
                         })
                             .then(response => response.json()) // Expecting a JSON object (array)
                             .then(data => {
+
                                 console.log(`Search API Response for ${category}:`, data);
                                 if (data && Array.isArray(data) && data.length > 0 && data[0].file_path) {
                                     const filePath = data[0].file_path; // Access file_path from the first element
@@ -240,6 +250,8 @@ function cropAndDisplay(originalFile, cropData) {
                                     imgElement.style.maxWidth = '150px';
                                     imgElement.style.objectFit = 'contain';
                                     imgElement.style.margin = '5px';
+                                    imgElement.style.borderRadius = '10px'
+                                    imgElement.style.paddingRight = "1em"
                                     imgElement.onload = () => {
                                         imagesLoadedCount++;
                                         checkLoadingComplete();
