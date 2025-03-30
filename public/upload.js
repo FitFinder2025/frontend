@@ -6,6 +6,7 @@ const placeholderText = imageView.querySelector("p");
 const resultDiv = document.getElementById('result');
 const closetDiv = document.getElementById("closet")
 const textCrop = document.getElementById("crop-text");
+const cropDiv = document.getElementById("crop"); // Get the crop div
 
 
 
@@ -167,6 +168,11 @@ function sendImageToCropAPI(file) {
         });
 }
 
+// Define the plexit function
+function plexit() {
+    console.log("hi");
+}
+
 function cropAndDisplay(originalFile, cropData) {
     const reader = new FileReader();
     let imagesLoadedCount = 0;
@@ -178,6 +184,21 @@ function cropAndDisplay(originalFile, cropData) {
             // Only remove the 'loading' class, keep the 'show' class
             resultDiv.classList.remove('loading');
             console.log("All images loaded, animation stopped.");
+
+            // Create a new div for search options
+            const searchDiv = document.createElement('div');
+            searchDiv.id = 'searchDiv';
+            resultDiv.appendChild(searchDiv);
+            searchDiv.innerText = "Hello World";
+
+            // Change the text of crop-text
+            textCrop.innerText = "Click to Search:";
+
+            // Add event listeners to the images in the crop div
+            const croppedImages = cropDiv.querySelectorAll('img');
+            croppedImages.forEach(img => {
+                img.addEventListener('click', plexit);
+            });
         }
     }
 
@@ -185,13 +206,13 @@ function cropAndDisplay(originalFile, cropData) {
         const originalImage = new Image();
         originalImage.onload = function () {
             const container = document.getElementById('crop');
-if (container) {
-    container.innerHTML = '';
-    // Remove these conflicting inline styles
-    // container.style.display = 'flex';
-    // container.style.flexDirection = 'column';
-    // container.style.alignItems = 'flex-start';
-}
+            if (container) {
+                container.innerHTML = '';
+                // Remove these conflicting inline styles
+                // container.style.display = 'flex';
+                // container.style.flexDirection = 'column';
+                // container.style.alignItems = 'flex-start';
+            }
 
             // If there are no crops, remove loading animation immediately
             if (totalImagesToLoad === 0) {
