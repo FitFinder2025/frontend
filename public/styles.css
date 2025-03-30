@@ -1,16 +1,26 @@
+#main-content
+{
+    transition: transform 0.5s ease-in-out;
+}
+
+#main-content.shift-left
+{
+    transform: translateX(-30vw);
+}
+
 #drop-area {
     width: 450px;
     padding: 20px;
-    background: rgb(216, 228, 238);
+    background: #012c41;
     text-align: center;
     border-radius: 20px;
-    margin: auto; /* Add margin to move it from the left */
+    margin: 60px auto; /* Add margin to move it from the left */
 }
 
 #crop {
     width: 450px;
     padding: 20px;
-    background: rgb(216, 228, 238);
+    background:#012c41;
     border-radius: 20px;
     margin:auto;
     display: flex;
@@ -24,12 +34,12 @@
     width: 400px;
     height: 400px;
     border-radius: 20px;
-    border: 2px dashed black;
-    background: #f7f8ff;
+    border: 2px dashed #6a8ea5;
+    background: #003a54;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #888;
+    color: #6a8ea5;
     /* Style for the placeholder text */
     font-size: 1.2em;
 }
@@ -66,18 +76,71 @@
     font-size: 0.8em; /* Adjust font size if needed */
     color: #555;
     white-space: nowrap; /* Prevent labels from wrapping */
+    
 }
 
 #result {
-    margin-top: 20px;
-    margin-left: 30px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 0.9em;
-    white-space: pre-wrap; /* Display JSON response with line breaks */
+    position: fixed;
+    top: 70px; /* Adjust based on your navbar height */
+    right: 0;
+    width: 40vw; /* Adjust width as needed */
+    height: calc(100vh - 70px); /* Adjust height based on your navbar height */
+    background-color: #012c41;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 1em;
+    display: none; /* Initially hidden */
+    z-index: 1000;
 }
+
+#result.show 
+{
+    display: block;
+}
+
+@property --angle
+{
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits:false;
+}
+#result::after, #result::before
+{
+    content: '';
+    position: absolute;
+    height:100%;
+    width:110%;
+    background-image:conic-gradient(from var(--angle), transparent 70%, lightblue);
+
+    top: 50%;
+    left:50%;
+
+    translate: -50% -50%;
+
+    z-index: -1;
+
+    padding: 20px;
+    border-radius: 10px;
+    animation: 2s spin linear infinite;
+
+}
+
+#result::before{
+    filter:blur(1.5rem);
+    opacity:0.5;
+
+}
+
+@keyframes spin{
+    from {
+        --angle:0deg;
+    }
+    to {
+        --angle:360deg;
+    }
+
+}
+
 
 .offcanvas-end {
     width: 300px !important; /* Adjust the width as needed */
@@ -87,16 +150,14 @@
 {
     position: relative;
     display: inline-block;
+    
 }
-
-@font-face {
-    font-family: 'Walter Turncoat';
-    src: url('fonts/WalterTurncoat.ttf');
-  }
 
 .website-name
 {
-    font-family:'Walter Turncoat';
+    font-family:'Walter Turncoat', cursive;
+    color: #003a54;
+    font-weight: bold;
     position: absolute;
     top: -2;
     left: 0;
@@ -113,3 +174,12 @@
     transform: translateX(50px);
     opacity: 1;
 }
+
+.nav-item
+{
+    font-family:'Walter Turncoat', cursive;
+    font-size:larger;
+    
+}
+
+

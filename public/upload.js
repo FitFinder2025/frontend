@@ -44,6 +44,8 @@ const closetDiv = document.getElementById("closet")
                 const file = inputFile.files[0];
                 displayImage(file);
                 sendImageToCropAPI(file);
+
+                triggerTransition();
             } else {
                 console.log("No file selected");
                 resetImageView();
@@ -63,6 +65,8 @@ const closetDiv = document.getElementById("closet")
                     displayImage(pastedImageFile);
                     sendImageToCropAPI(pastedImageFile);
                     foundImage = true;
+
+                    triggerTransition();
                     break;
                 }
             }
@@ -82,6 +86,8 @@ const closetDiv = document.getElementById("closet")
                 if (file.type.startsWith('image/')) {
                     displayImage(file); // Display the full image first
                     sendImageToCropAPI(file);
+
+                    triggerTransition();
                 } else {
                     console.log("Dropped file is not an image.");
                     // Optionally provide user feedback (e.g., a message)
@@ -114,6 +120,15 @@ const closetDiv = document.getElementById("closet")
             if (croppedImagesContainer) {
                 croppedImagesContainer.remove();
             }
+        }
+
+        function triggerTransition()
+        {
+            const mainContent = document.getElementById('main-content');
+            const resultDiv = document.getElementById('result');
+
+            mainContent.classList.add('shift-left');
+            resultDiv.classList.add('show');
         }
 
         function sendImageToCropAPI(file) {
@@ -236,4 +251,6 @@ const closetDiv = document.getElementById("closet")
             };
             reader.readAsDataURL(originalFile);
         }
+
+
    
