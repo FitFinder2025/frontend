@@ -1,11 +1,14 @@
 #main-content
 {
-    transition: transform 0.5s ease-in-out;
+    transition:transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: translateX(0);
+    position:relative;
+    z-index: auto;
 }
 
 #main-content.shift-left
 {
-    transform: translateX(-30vw);
+    transform: translateX(-35%);
 }
 
 #drop-area {
@@ -27,7 +30,7 @@
     flex-wrap: wrap; /* Keep wrap for responsiveness */
     gap: 10px; /* Adjust gap for spacing */
     justify-content: flex-start; /* Align items to the start */
-    align-items: center; /* Align items vertically in the center */
+    align-items: center ; /* Align items vertically in the center */
 }
 
 #img-view {
@@ -81,16 +84,14 @@
 
 #result {
     position: fixed;
-    top: 70px; /* Adjust based on your navbar height */
-    right: 0;
-    width: 40vw; /* Adjust width as needed */
-    height: calc(100vh - 70px); /* Adjust height based on your navbar height */
-    background-color: #012c41;
-    padding: 20px;
-    border-radius: 10px;
-    font-size: 1em;
-    display: none; /* Initially hidden */
+    top: 40px; /* Adjust based on your navbar height */
+    right: -500px;
+    width: 1000px; /* Adjust width as needed */
+    height: calc(800px - 70px); /* Adjust height based on your navbar height */
+    padding: 10px;
+    border-radius: 20px;
     z-index: 1000;
+    display: none;
 }
 
 #result.show 
@@ -108,27 +109,46 @@
 {
     content: '';
     position: absolute;
-    height:100%;
-    width:110%;
-    background-image:conic-gradient(from var(--angle), transparent 70%, lightblue);
-
-    top: 50%;
-    left:50%;
-
-    translate: -50% -50%;
-
+    height: calc(100% + 30px);
+    width:calc(100% + 30px);
+    background-image:conic-gradient(from var(--angle), transparent 60%, rgb(255, 255, 255));
     z-index: -1;
 
-    padding: 20px;
-    border-radius: 10px;
+    top: 100%;
+    left: 100%;
+
+    padding: 40px;
+    border-radius: 20px;
     animation: 2s spin linear infinite;
+
+    pointer-events: none;
+    inset: -15px;
+
+    
+    
 
 }
 
-#result::before{
-    filter:blur(1.5rem);
-    opacity:0.5;
+#result.show::after, #result.show::before{
+    animation-play-state: running; 
+}
 
+#result::before{
+    filter:blur(1rem);
+    opacity:0.6;
+    height:110%;
+    width: 110%;
+
+    transform: -50% -50%;
+    z-index: -2;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 30px rgba(255, 0, 122, 0.6);
+
+
+}
+
+#result::after{
+    z-index: -1;
+    background: #012c41;
 }
 
 @keyframes spin{

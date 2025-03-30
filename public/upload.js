@@ -121,12 +121,12 @@ const closetDiv = document.getElementById("closet")
                 croppedImagesContainer.remove();
             }
         }
+        const mainContent = document.getElementById('main-content');
+        
 
         function triggerTransition()
         {
-            const mainContent = document.getElementById('main-content');
-            const resultDiv = document.getElementById('result');
-
+    
             mainContent.classList.add('shift-left');
             resultDiv.classList.add('show');
         }
