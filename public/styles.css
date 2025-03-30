@@ -124,12 +124,10 @@
     pointer-events: none;
     inset: -15px;
 
-    
-    
-
 }
 
-#result.show::after, #result.show::before{
+#result.show::after, #result.show::before
+{
     animation-play-state: running; 
 }
 
