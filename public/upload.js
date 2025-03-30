@@ -168,9 +168,58 @@ function sendImageToCropAPI(file) {
         });
 }
 
+// Function to convert data URL to Blob
+function dataURLtoBlob(dataURL) {
+    const byteString = atob(dataURL.split(',')[1]);
+    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+}
+
 // Define the plexit function
-function plexit() {
-    console.log("hi");
+function plexit(event) {
+    const clickedImage = event.target;
+    const imageDataURL = clickedImage.src;
+    const imageBlob = dataURLtoBlob(imageDataURL);
+    const formData = new FormData();
+    formData.append('file', imageBlob, 'clicked_image.png'); // 'file' is the expected name by your backend
+
+    fetch('http://localhost:5000/plex', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+        console.log("Plex API Result (Raw):", result);
+        try {
+            const parsedResult = JSON.parse(result);
+            console.log("Parsed Plex API Result:");
+            for (let i = 1; i <= 3; i++) {
+                const clothingName = parsedResult[`clothing_name${i}`];
+                const price = parsedResult[`price${i}`];
+                const sustainabilityScore = parsedResult[`sustainibility_score${i}`];
+                const purchaseLink = parsedResult[`purchase_link${i}`];
+
+                if (clothingName) {
+                    console.log(`  Clothing ${i}:`);
+                    console.log(`    Name: ${clothingName}`);
+                    console.log(`    Price: $${price}`);
+                    console.log(`    Sustainability Score: ${sustainabilityScore}`);
+                    console.log(`    Purchase Link: ${purchaseLink}`);
+                }
+            }
+        } catch (error) {
+            console.error("Error parsing Plex API response:", error);
+            console.log("Problematic response:", result);
+        }
+    })
+    .catch(error => {
+        console.error("Error sending image to Plex API:", error);
+    });
 }
 
 function cropAndDisplay(originalFile, cropData) {
@@ -262,7 +311,7 @@ function cropAndDisplay(originalFile, cropData) {
                             method: 'POST',
                             body: formData
                         })
-                            .then(response => response.json()) // Expecting a JSON object (array)
+                            .then(response => response.json())
                             .then(data => {
 
                                 console.log(`Search API Response for ${category}:`, data);
