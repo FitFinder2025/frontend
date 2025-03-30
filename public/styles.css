@@ -1,13 +1,11 @@
-#main-content
-{
-    transition:transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+#main-content {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     transition: translateX(0);
-    position:relative;
+    position: relative;
     z-index: auto;
 }
 
-#main-content.shift-left
-{
+#main-content.shift-left {
     transform: translateX(-35%);
 }
 
@@ -23,14 +21,14 @@
 #crop {
     width: 450px;
     padding: 20px;
-    background:#e0c6e9;
+    background: #e0c6e9;
     border-radius: 20px;
-    margin:auto;
+    margin: auto;
     display: flex;
     flex-wrap: wrap; /* Keep wrap for responsiveness */
     gap: 10px; /* Adjust gap for spacing */
     justify-content: flex-start; /* Align items to the start */
-    align-items: center ; /* Align items vertically in the center */
+    align-items: center; /* Align items vertically in the center */
 }
 
 #img-view {
@@ -57,7 +55,6 @@
     /* Match the parent */
 }
 
-
 #crop > div {
     display: flex;
     flex-direction: column;
@@ -78,8 +75,7 @@
     margin-top: 5px;
     font-size: 0.8em; /* Adjust font size if needed */
     color: #555;
-    white-space: nowrap; /* Prevent labels from wrapping */
-    
+    white-space: nowrap;
 }
 
 #result {
@@ -94,104 +90,94 @@
     display: none;
 }
 
-#result.show 
-{
+#result.show {
     display: block;
 }
 
-@property --angle
-{
+@property --angle {
     syntax: "<angle>";
     initial-value: 0deg;
-    inherits:false;
+    inherits: false;
 }
-#result::after, #result::before
-{
+
+/* Base styling for the result div */
+#result::after,
+#result::before {
     content: '';
     position: absolute;
     height: calc(100% + 30px);
-    width:calc(100% + 30px);
-    background-image:conic-gradient(from var(--angle), transparent 60%, rgb(168, 137, 255));
+    width: calc(100% + 30px);
+    background-image: conic-gradient(from var(--angle), transparent 60%, rgb(168, 137, 255));
     z-index: -1;
-
     padding: 40px;
     border-radius: 20px;
     animation: 2s spin linear infinite;
-
+    animation-play-state: paused; /* Start with animation paused */
     pointer-events: none;
     inset: -5px;
-
 }
 
-#result.show::after, #result.show::before
-{
-    animation-play-state: running; 
+/* Only run the animation when the loading class is present */
+#result.loading::after,
+#result.loading::before {
+    animation-play-state: running;
 }
 
-#result::before{
-    filter:blur(1.5rem);
-    opacity:0.6;
-    height:110%;
+
+
+#result::before {
+    filter: blur(1.5rem);
+    opacity: 0.6;
+    height: 110%;
     width: 100%;
     z-index: -2;
-
-
 }
 
-#result::after{
+#result::after {
     z-index: -1;
     background: #ded8e8;
 }
 
-@keyframes spin{
+@keyframes spin {
     from {
-        --angle:0deg;
+        --angle: 0deg;
     }
     to {
-        --angle:360deg;
+        --angle: 360deg;
     }
-
 }
-
 
 .offcanvas-end {
     width: 300px !important; /* Adjust the width as needed */
 }
 
-.navbar-brand
-{
+.navbar-brand {
     position: relative;
     display: inline-block;
-    
 }
 
-.website-name
-{
-    font-family:'Walter Turncoat', cursive;
+.website-name {
+    font-family: 'Walter Turncoat', cursive;
     color: #003a54;
     font-weight: bold;
     position: absolute;
     top: -2;
     left: 0;
-    background-color:transparent;
+    background-color: transparent;
     padding: 0 10px;
     transform: translateX(50);
     transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
     opacity: 0;
-
 }
 
-.navbar-brand:hover .website-name 
-{
+.navbar-brand:hover .website-name {
     transform: translateX(50px);
     opacity: 1;
 }
 
-.nav-item
-{
-    font-family:'Walter Turncoat', cursive;
-    font-size:larger;
-    
+.nav-item {
+    font-family: 'Walter Turncoat', cursive;
+    font-size: larger;
 }
 
 .about-title {
@@ -209,34 +195,17 @@
 .about-title h1 {
     font-size: 7rem;
     font-family: 'Walter Turncoat', cursive;
-    color: #6960b8;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    color: #000000;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     transition: transform 0.1s ease-out;
     cursor: default;
     margin-bottom: 1rem;
 }
 
 .about-title h2 {
-    
-    font-weight: bold;
     font-size: 1.5rem;
     font-family: 'Walter Turncoat', cursive;
     color: #8f84f4;
     transition: transform 0.1s ease-out;
     cursor: default;
 }
-
-.about-title h3 {
-    margin-left:25%;
-    margin-right:25%;
-    font-size: 1.5rem;
-    font-family: 'Walter Turncoat', cursive;
-    color: #8f84f4;
-    transition: transform 0.1s ease-out;
-    cursor: default;
-}
-
-
-
-
-
