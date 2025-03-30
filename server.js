@@ -21,6 +21,9 @@ app.get('/', (req, res) => {
   app.get('/aboutus', (req, res) => {
     res.render('aboutus');
   });
+  app.get('/closet', (req, res) => {
+    res.render('closet');
+  });
 
   app.set('view engine', 'ejs');
   app.set('views', path.join(__dirname, 'views'));
