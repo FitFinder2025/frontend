@@ -111,18 +111,15 @@
     position: absolute;
     height: calc(100% + 30px);
     width:calc(100% + 30px);
-    background-image:conic-gradient(from var(--angle), transparent 60%, rgb(255, 255, 255));
+    background-image:conic-gradient(from var(--angle), transparent 60%, rgb(168, 137, 255));
     z-index: -1;
-
-    top: 100%;
-    left: 100%;
 
     padding: 40px;
     border-radius: 20px;
     animation: 2s spin linear infinite;
 
     pointer-events: none;
-    inset: -15px;
+    inset: -5px;
 
 }
 
@@ -132,14 +129,11 @@
 }
 
 #result::before{
-    filter:blur(1rem);
+    filter:blur(1.5rem);
     opacity:0.6;
     height:110%;
-    width: 110%;
-
-    transform: -50% -50%;
+    width: 100%;
     z-index: -2;
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 30px rgba(255, 0, 122, 0.6);
 
 
 }
