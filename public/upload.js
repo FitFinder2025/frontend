@@ -5,6 +5,10 @@ const bgImage = document.querySelector("#bg");
 const placeholderText = imageView.querySelector("p");
 const resultDiv = document.getElementById('result');
 const closetDiv = document.getElementById("closet")
+const textCrop = document.getElementById("crop-text");
+const cropDiv = document.getElementById("crop"); // Get the crop div
+
+
 
 inputFile.addEventListener("change", uploadAndCropImage);
 dropArea.addEventListener("paste", handlePaste);
@@ -38,6 +42,7 @@ function unhighlight(e) {
 dropArea.addEventListener('drop', handleDrop, false);
 
 function uploadAndCropImage() {
+    textCrop.innerText = "Searching For:"
     console.log("uploadAndCropImage function called (file input)");
     console.log("inputFile.files:", inputFile.files);
     if (inputFile.files && inputFile.files[0]) {
@@ -163,16 +168,113 @@ function sendImageToCropAPI(file) {
         });
 }
 
+// Function to convert data URL to Blob
+function dataURLtoBlob(dataURL) {
+    const byteString = atob(dataURL.split(',')[1]);
+    const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+}
+
+// Define the plexit function
+function plexit(event) {
+    const clickedImage = event.target;
+    const imageDataURL = clickedImage.src;
+    const imageBlob = dataURLtoBlob(imageDataURL);
+    const formData = new FormData();
+    formData.append('file', imageBlob, 'clicked_image.png'); // 'file' is the expected name by your backend
+
+    fetch('http://localhost:5000/plex', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json()) // Expecting JSON now
+    .then(parsedResult => {
+        console.log("Plex API Result (Raw):", JSON.stringify(parsedResult)); // Log the raw parsed JSON
+        console.log("Parsed Plex API Result:");
+
+        // Clear previous results
+        resultDiv.innerHTML = '';
+
+        if (Array.isArray(parsedResult)) {
+            parsedResult.forEach(item => {
+                const clothingName = item.clothing_name;
+                const price = item.price;
+                const sustainabilityIndex = item.sustainibility_index;
+                const purchaseLink = item.purchase_link;
+
+                if (clothingName) {
+                    const card = document.createElement('div');
+                    card.classList.add('card'); // Add a class for styling
+
+                    const nameHeading = document.createElement('h3');
+                    nameHeading.textContent = clothingName;
+
+                    const priceParagraph = document.createElement('p');
+                    priceParagraph.textContent = `Price: $${price}`;
+
+                    const sustainabilityParagraph = document.createElement('p');
+                    sustainabilityParagraph.textContent = `Sustainability Index: ${sustainabilityIndex}`;
+
+                    const linkParagraph = document.createElement('p');
+                    const link = document.createElement('a');
+                    link.href = purchaseLink;
+                    link.textContent = 'Purchase Link';
+                    link.target = '_blank'; 
+                    linkParagraph.appendChild(link);
+
+                    card.appendChild(nameHeading);
+                    card.appendChild(priceParagraph);
+                    card.appendChild(sustainabilityParagraph);
+                    card.appendChild(linkParagraph);
+
+                    resultDiv.appendChild(card);
+                    break_element = document.createElement("br")
+                    resultDiv.appendChild(break_element);
+
+                }
+            });
+        } else {
+            console.log("Parsed result is not an array:", parsedResult);
+            resultDiv.textContent = "No matching products found.";
+        }
+    })
+    .catch(error => {
+        console.error("Error sending image to Plex API:", error);
+        resultDiv.textContent = "Error fetching product details.";
+    });
+}
+
 function cropAndDisplay(originalFile, cropData) {
     const reader = new FileReader();
     let imagesLoadedCount = 0;
     const totalImagesToLoad = cropData.length;
+    let headingAdded = false; // Flag for search results heading
 
     function checkLoadingComplete() {
         if (imagesLoadedCount === totalImagesToLoad) {
             // Only remove the 'loading' class, keep the 'show' class
             resultDiv.classList.remove('loading');
             console.log("All images loaded, animation stopped.");
+
+            // Create a new div for search options
+            const searchDiv = document.createElement('div');
+            searchDiv.id = 'searchDiv';
+            resultDiv.appendChild(searchDiv);
+
+            // Change the text of crop-text
+            textCrop.innerText = "Click to Search:";
+
+            // Add event listeners to the images in the crop div
+            const croppedImages = cropDiv.querySelectorAll('img');
+            croppedImages.forEach(img => {
+                img.addEventListener('click', plexit);
+                console.log("perplexity is called")
+            });
         }
     }
 
@@ -182,9 +284,10 @@ function cropAndDisplay(originalFile, cropData) {
             const container = document.getElementById('crop');
             if (container) {
                 container.innerHTML = '';
-                container.style.display = 'flex';
-                container.style.flexDirection = 'row';
-                container.style.alignItems = 'center';
+                // Remove these conflicting inline styles
+                // container.style.display = 'flex';
+                // container.style.flexDirection = 'column';
+                // container.style.alignItems = 'flex-start';
             }
 
             // If there are no crops, remove loading animation immediately
@@ -192,6 +295,14 @@ function cropAndDisplay(originalFile, cropData) {
                 resultDiv.classList.remove('loading');
                 console.log("No crops to process, animation stopped.");
                 return;
+            }
+
+            // Add the search results heading only once
+            if (!headingAdded) {
+                let heading = document.createElement("h3");
+                heading.innerText = "Matching Items in Your Closet";
+                resultDiv.appendChild(heading);
+                headingAdded = true;
             }
 
             cropData.forEach(cropInfo => {
@@ -227,8 +338,9 @@ function cropAndDisplay(originalFile, cropData) {
                             method: 'POST',
                             body: formData
                         })
-                            .then(response => response.json()) // Expecting a JSON object (array)
+                            .then(response => response.json())
                             .then(data => {
+
                                 console.log(`Search API Response for ${category}:`, data);
                                 if (data && Array.isArray(data) && data.length > 0 && data[0].file_path) {
                                     const filePath = data[0].file_path; // Access file_path from the first element
@@ -240,6 +352,8 @@ function cropAndDisplay(originalFile, cropData) {
                                     imgElement.style.maxWidth = '150px';
                                     imgElement.style.objectFit = 'contain';
                                     imgElement.style.margin = '5px';
+                                    imgElement.style.borderRadius = '10px'
+                                    imgElement.style.paddingRight = "1em"
                                     imgElement.onload = () => {
                                         imagesLoadedCount++;
                                         checkLoadingComplete();
@@ -277,7 +391,6 @@ function cropAndDisplay(originalFile, cropData) {
 
                     const imageContainer = document.createElement('div');
                     imageContainer.style.display = 'flex';
-                    imageContainer.style.flexDirection = 'column';
                     imageContainer.style.alignItems = 'center';
                     imageContainer.appendChild(croppedImage);
                     container.appendChild(imageContainer);

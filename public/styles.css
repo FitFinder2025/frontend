@@ -18,17 +18,17 @@
     margin: 60px auto; /* Add margin to move it from the left */
 }
 
-#crop {
+#textcrop {
     width: 450px;
     padding: 20px;
     background: #e0c6e9;
     border-radius: 20px;
     margin: auto;
+    gap: 10px; /* Adjust gap for spacing between the heading and images */
+    justify-content: flex-start; /* Align items to the start along the main axis (vertical now) */
     display: flex;
-    flex-wrap: wrap; /* Keep wrap for responsiveness */
-    gap: 10px; /* Adjust gap for spacing */
-    justify-content: flex-start; /* Align items to the start */
-    align-items: center; /* Align items vertically in the center */
+    flex-direction: column;
+    align-items: center; /* Change from flex-start to center */
 }
 
 #img-view {
@@ -55,11 +55,21 @@
     /* Match the parent */
 }
 
+#crop {
+    display: flex;
+    flex-direction: row; /* Ensure horizontal layout */
+    flex-wrap: wrap;
+    justify-content: center; /* Center items horizontally */
+    gap: 15px; /* Adjust spacing between items */
+    width: 100%;
+    padding: 10px 0;
+}
+
 #crop > div {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    margin: 0 5px; /* Horizontal spacing only */
 }
 
 #crop img {
@@ -83,7 +93,7 @@
     top: 40px; /* Adjust based on your navbar height */
     right: -500px;
     width: 1000px; /* Adjust width as needed */
-    height: 50%; /* Adjust height based on your navbar height */
+    height: min-content; /* Adjust height based on your navbar height */
     padding: 10px;
     border-radius: 20px;
     z-index: 1000;
