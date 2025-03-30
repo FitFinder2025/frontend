@@ -192,33 +192,60 @@ function plexit(event) {
         method: 'POST',
         body: formData
     })
-    .then(response => response.text())
-    .then(result => {
-        console.log("Plex API Result (Raw):", result);
-        try {
-            const parsedResult = JSON.parse(result);
-            console.log("Parsed Plex API Result:");
-            for (let i = 1; i <= 3; i++) {
-                const clothingName = parsedResult[`clothing_name${i}`];
-                const price = parsedResult[`price${i}`];
-                const sustainabilityScore = parsedResult[`sustainibility_score${i}`];
-                const purchaseLink = parsedResult[`purchase_link${i}`];
+    .then(response => response.json()) // Expecting JSON now
+    .then(parsedResult => {
+        console.log("Plex API Result (Raw):", JSON.stringify(parsedResult)); // Log the raw parsed JSON
+        console.log("Parsed Plex API Result:");
+
+        // Clear previous results
+        resultDiv.innerHTML = '';
+
+        if (Array.isArray(parsedResult)) {
+            parsedResult.forEach(item => {
+                const clothingName = item.clothing_name;
+                const price = item.price;
+                const sustainabilityIndex = item.sustainibility_index;
+                const purchaseLink = item.purchase_link;
 
                 if (clothingName) {
-                    console.log(`  Clothing ${i}:`);
-                    console.log(`    Name: ${clothingName}`);
-                    console.log(`    Price: $${price}`);
-                    console.log(`    Sustainability Score: ${sustainabilityScore}`);
-                    console.log(`    Purchase Link: ${purchaseLink}`);
+                    const card = document.createElement('div');
+                    card.classList.add('card'); // Add a class for styling
+
+                    const nameHeading = document.createElement('h3');
+                    nameHeading.textContent = clothingName;
+
+                    const priceParagraph = document.createElement('p');
+                    priceParagraph.textContent = `Price: $${price}`;
+
+                    const sustainabilityParagraph = document.createElement('p');
+                    sustainabilityParagraph.textContent = `Sustainability Index: ${sustainabilityIndex}`;
+
+                    const linkParagraph = document.createElement('p');
+                    const link = document.createElement('a');
+                    link.href = purchaseLink;
+                    link.textContent = 'Purchase Link';
+                    link.target = '_blank'; 
+                    linkParagraph.appendChild(link);
+
+                    card.appendChild(nameHeading);
+                    card.appendChild(priceParagraph);
+                    card.appendChild(sustainabilityParagraph);
+                    card.appendChild(linkParagraph);
+
+                    resultDiv.appendChild(card);
+                    break_element = document.createElement("br")
+                    resultDiv.appendChild(break_element);
+
                 }
-            }
-        } catch (error) {
-            console.error("Error parsing Plex API response:", error);
-            console.log("Problematic response:", result);
+            });
+        } else {
+            console.log("Parsed result is not an array:", parsedResult);
+            resultDiv.textContent = "No matching products found.";
         }
     })
     .catch(error => {
         console.error("Error sending image to Plex API:", error);
+        resultDiv.textContent = "Error fetching product details.";
     });
 }
 
@@ -238,7 +265,6 @@ function cropAndDisplay(originalFile, cropData) {
             const searchDiv = document.createElement('div');
             searchDiv.id = 'searchDiv';
             resultDiv.appendChild(searchDiv);
-            searchDiv.innerText = "Hello World";
 
             // Change the text of crop-text
             textCrop.innerText = "Click to Search:";
@@ -247,6 +273,7 @@ function cropAndDisplay(originalFile, cropData) {
             const croppedImages = cropDiv.querySelectorAll('img');
             croppedImages.forEach(img => {
                 img.addEventListener('click', plexit);
+                console.log("perplexity is called")
             });
         }
     }
