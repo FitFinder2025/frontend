@@ -205,11 +205,12 @@ const closetDiv = document.getElementById("closet")
                                     method: 'POST',
                                     body: formData
                                 })
-                                    .then(response => response.json()) // Expecting a JSON object
+                                    .then(response => response.json()) // Expecting a JSON object (array)
                                     .then(data => {
                                         console.log(`Search API Response for ${category}:`, data);
-                                        if (data && data.file_path) {
-                                            const imageUrl = `http://localhost:5000/uploads/${data.file_path}`;
+                                        if (data && Array.isArray(data) && data.length > 0 && data[0].file_path) {
+                                            const filePath = data[0].file_path; // Access file_path from the first element
+                                            const imageUrl = `http://localhost:5000/${filePath}`;
                                             const imgElement = document.createElement('img');
                                             imgElement.src = imageUrl;
                                             imgElement.alt = category;
