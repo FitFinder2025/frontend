@@ -31,24 +31,29 @@
                 <a class="nav-link" aria-current="page" href="/">Find Your Fit</a>
               </li>
             </ul>
+            <label for="upload-file" class="btn btn-success" style="cursor: pointer;">Upload to Closet</label>
+
           </div>
-      
-          
+
+
         </div>
       </nav>
 
       <div class="col-lg-7 p-2 p-lg-5 pt-lg-3">
         <h1 class="display-4 fw-bold lh-1">Your Closet</h1>
-       
+
       </div>
       <div id="closetDiv">
-        
-      </div>
-    
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-      
-    
+      </div>
+
+
+      <div class="hero mt-3">
+        <input type="file" accept="image/*" id="upload-file" style="display: none;">
+        <div id="upload-message" class="mt-2"></div>
+    </div>
+
+
 
 
     <script src="/closet.js"></script>
