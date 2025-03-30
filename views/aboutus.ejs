@@ -64,11 +64,15 @@
     <div class="about-title">
         <h1>Welcome To Fit Finder!!</h1>
         <h2> Creators: Aman Anwar, Noah Franks, Holly Mills</h2>
+        <h3>With our fit finder, you can rely on us to help you put together your next big look,
+            while doing your part by purchasing from sustainable sources! Be your best you, and use fit finder!
+        </h3>
     </div>
     <script>
         // Interactive text animation
         const title = document.querySelector('.about-title h1');
         const subtitle = document.querySelector('.about-title h2');
+        const subtitle2 = document.querySelector('.about-title h3');
         const moveRange = 30; // Adjust this value to control movement amount
 
         document.addEventListener('mousemove', (e) => {
@@ -88,6 +92,10 @@
             // Apply inverse movement to subtitle for parallax effect
             subtitle.style.transform = `
                 translate(${-xPercent * (moveRange/2)}px, ${-yPercent * (moveRange/2)}px)
+            `;
+
+            subtitle2.style.transform = `
+                translate(${-xPercent * (moveRange/3)}px, ${-yPercent * (moveRange/3)}px)
             `;
         });
     </script>

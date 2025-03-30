@@ -209,7 +209,7 @@
 .about-title h1 {
     font-size: 7rem;
     font-family: 'Walter Turncoat', cursive;
-    color: #000000;
+    color: #6960b8;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     transition: transform 0.1s ease-out;
     cursor: default;
@@ -217,6 +217,18 @@
 }
 
 .about-title h2 {
+    
+    font-weight: bold;
+    font-size: 1.5rem;
+    font-family: 'Walter Turncoat', cursive;
+    color: #8f84f4;
+    transition: transform 0.1s ease-out;
+    cursor: default;
+}
+
+.about-title h3 {
+    margin-left:25%;
+    margin-right:25%;
     font-size: 1.5rem;
     font-family: 'Walter Turncoat', cursive;
     color: #8f84f4;
