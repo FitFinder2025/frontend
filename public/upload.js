@@ -5,6 +5,9 @@ const bgImage = document.querySelector("#bg");
 const placeholderText = imageView.querySelector("p");
 const resultDiv = document.getElementById('result');
 const closetDiv = document.getElementById("closet")
+const textCrop = document.getElementById("crop-text");
+
+
 
 inputFile.addEventListener("change", uploadAndCropImage);
 dropArea.addEventListener("paste", handlePaste);
@@ -38,6 +41,7 @@ function unhighlight(e) {
 dropArea.addEventListener('drop', handleDrop, false);
 
 function uploadAndCropImage() {
+    textCrop.innerText = "Searching For:"
     console.log("uploadAndCropImage function called (file input)");
     console.log("inputFile.files:", inputFile.files);
     if (inputFile.files && inputFile.files[0]) {
