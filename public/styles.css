@@ -14,7 +14,7 @@
 #drop-area {
     width: 450px;
     padding: 20px;
-    background: #012c41;
+    background: #ded8e8;
     text-align: center;
     border-radius: 20px;
     margin: 60px auto; /* Add margin to move it from the left */
@@ -23,7 +23,7 @@
 #crop {
     width: 450px;
     padding: 20px;
-    background:#012c41;
+    background:#e0c6e9;
     border-radius: 20px;
     margin:auto;
     display: flex;
@@ -146,7 +146,7 @@
 
 #result::after{
     z-index: -1;
-    background: #012c41;
+    background: #ded8e8;
 }
 
 @keyframes spin{
